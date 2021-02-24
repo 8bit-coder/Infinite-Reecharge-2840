@@ -73,7 +73,7 @@ frc::Compressor *compressor = new frc::Compressor(0);
 
 ctre::phoenix::sensors::PigeonIMU pigeon{talon};
 //0.65 is the ideal sensitivity
-double speed = 0.0, turn = 0.0, autoturn = 0.6, autospeed = 0.6, sensitivity = 1.0, turnKey, avgDist = 0.0, currentTime = 0.0, prevTime = 0.0, maxTime = 0, maxSpeed = 0;
+double speed = 0.0, turn = 0.0, autoturn = 0.5, sensitivity = 1.0, turnKey, avgDist = 0.0, currentTime = 0.0, prevTime = 0.0, maxTime = 0, maxSpeed = 0;
 bool isUpPressed, isDownPressed;
 double sP,tN;
 int16_t accel[3];
@@ -277,7 +277,7 @@ void Robot::AutonomousPeriodic() {
   //Start at (3.625, 8.875) with heading 0
   //Fastest time = 21 second (DO NOT DELETE)
   if (stage == 0) {//arrives at position 2 (14.125, 8.875) with heading 0
-    myRobot.ArcadeDrive(autospeed, 0.0);
+    myRobot.ArcadeDrive(0.5, 0.0);
     if (avgDist >= 8.16200375+1) {stage++; prevTime = currentTime; resetEncoders();}
   }
   else if (stage == 1) {//face down (turn right)
@@ -285,7 +285,7 @@ void Robot::AutonomousPeriodic() {
     if (heading() >= 85-45 && heading() <= 95-45) {stage++; prevTime = currentTime; resetEncoders();}
   }
   else if (stage == 2) {//arrives at position 3 (14.125, 3.625) with heading 90
-    myRobot.ArcadeDrive(autospeed, 0.0);
+    myRobot.ArcadeDrive(0.5, 0.0);
     if (avgDist >= 5.239698-2) {stage++; prevTime = currentTime; resetEncoders();}
   }
   else if (stage == 3) {//face left (turn right)
@@ -293,7 +293,7 @@ void Robot::AutonomousPeriodic() {
     if (heading() >= 175-45 && heading() <= 185-45) {stage++; prevTime = currentTime; resetEncoders();}
   }
   else if (stage == 4) {//arrives at position 4 (11.125, 3.625) with heading 180
-    myRobot.ArcadeDrive(autospeed, 0.0);
+    myRobot.ArcadeDrive(0.5, 0.0);
     if (avgDist >= 3.340756) {stage++; prevTime = currentTime; resetEncoders();}
   }
   else if (stage == 5) {//face up (turn right)
@@ -301,7 +301,7 @@ void Robot::AutonomousPeriodic() {
     if (heading() >= 265-44 && heading() <= 275-44) {stage++; prevTime = currentTime; resetEncoders();}
   }
   else if (stage == 6) {//arrives at position 5 (11.125, 6.625) with heading 270
-    myRobot.ArcadeDrive(autospeed, 0.0);
+    myRobot.ArcadeDrive(0.5, 0.0);
     if (avgDist >= 2.907335) {stage++; prevTime = currentTime; resetEncoders();}
   }
   else if (stage == 7) {//face right (turn right)
@@ -309,23 +309,23 @@ void Robot::AutonomousPeriodic() {
     if (heading() <= 365-43 && heading() >= 355-43) {stage++; prevTime = currentTime; resetEncoders();}
   }
   else if (stage == 8) {//arrives at position 6 (21.375, 6.625) with heading 0
-    myRobot.ArcadeDrive(autospeed, 0.0);
-    if (avgDist >= 10.217183-2.5) {stage++; prevTime = currentTime; resetEncoders();}
+    myRobot.ArcadeDrive(0.5, 0.0);
+    if (avgDist >= 10.217183) {stage++; prevTime = currentTime; resetEncoders();}
   }
   else if (stage == 9) {//face up (turn left)
     myRobot.ArcadeDrive(0.0, -autoturn);
-    if (heading() <= 275+53 && heading() >= 265+53) {stage++; prevTime = currentTime; resetEncoders();}
+    if (heading() <= 275+43 && heading() >= 265+43) {stage++; prevTime = currentTime; resetEncoders();}
   }
   else if (stage == 10) {//arrives at position 7 (21.375, 11.375) with heading 270
-    myRobot.ArcadeDrive(autospeed, 0.0);
-    if (avgDist >= 4.842042-1.5) {stage++; prevTime = currentTime; resetEncoders();}
+    myRobot.ArcadeDrive(0.5, 0.0);
+    if (avgDist >= 4.842042-2) {stage++; prevTime = currentTime; resetEncoders();}
   }
   else if (stage == 11) {//face up (turn left)
     myRobot.ArcadeDrive(0.0, -autoturn);
     if (heading() <= 185+46.5 && heading() >= 175+46.5) {stage++; prevTime = currentTime; resetEncoders();}
   }
   else if (stage == 12) {//arrives at position 7 (21.375, 11.375) with heading 270
-    myRobot.ArcadeDrive(autospeed, 0.0);
+    myRobot.ArcadeDrive(0.5, 0.0);
     if (avgDist >= 4) {stage++; prevTime = currentTime; resetEncoders();}
   }
   else if (stage == 13) {//face up (turn left)
@@ -333,15 +333,15 @@ void Robot::AutonomousPeriodic() {
     if (heading() <= 95+45 && heading() >= 85+45) {stage++; prevTime = currentTime; resetEncoders();}
   }
   else if (stage == 14) {//arrives at position 7 (21.375, 11.375) with heading 270
-    myRobot.ArcadeDrive(autospeed, 0.0);
-    if (avgDist >= 7) {stage++; prevTime = currentTime; resetEncoders();}
+    myRobot.ArcadeDrive(0.5, 0.0);
+    if (avgDist >= 8) {stage++; prevTime = currentTime; resetEncoders();}
   }
   else if (stage == 15) {//face up (turn left)
     myRobot.ArcadeDrive(0.0, -autoturn);
     if (heading() <= 49 && heading() >= 39) {stage++; prevTime = currentTime; resetEncoders();}
   }
   else if (stage == 16) {
-    myRobot.ArcadeDrive(autospeed, 0.0);
+    myRobot.ArcadeDrive(0.5, 0.0);
     if (avgDist >= 9) {stage++; prevTime = currentTime; resetEncoders();}
   }
   else if (stage == 17) {
@@ -349,15 +349,15 @@ void Robot::AutonomousPeriodic() {
     if (heading() <= 280+43 && heading() >= 270+43) {stage++; prevTime = currentTime; resetEncoders();}
   }
   else if (stage == 18) {
-    myRobot.ArcadeDrive(autospeed, 0.0);
+    myRobot.ArcadeDrive(0.5, 0.0);
     if (avgDist >= 3.25) {stage++; prevTime = currentTime; resetEncoders();}
   }
   else if (stage == 19) {
     myRobot.ArcadeDrive(0.0, -autoturn);
-    if (heading() <= 185+50 && heading() >= 175+50) {stage++; prevTime = currentTime; resetEncoders();}
+    if (heading() <= 185+45 && heading() >= 175+45) {stage++; prevTime = currentTime; resetEncoders();}
   }
   else if (stage == 20) {
-    myRobot.ArcadeDrive(autospeed, 0.0);
+    myRobot.ArcadeDrive(0.5, 0.0);
     if (avgDist >= 30) {stage++; prevTime = currentTime; resetEncoders();}
   }
   // else if (stage == 11) {//face left (turn left)
