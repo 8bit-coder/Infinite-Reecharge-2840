@@ -114,7 +114,13 @@
                 "C:/Users/tomto/Desktop/Chairbot/Chair Bot/build/tmp/expandedArchives/wpilibc-cpp-2019.4.1-headers.zip_b81507b0c50c581f7502538d67c4b01b",
                 "C:/Users/Programming/.gradle/caches/transforms-2/files-2.1/07d59ebd6b9d0ec2216b937905ea0d46/wpilibNewCommands-cpp-2020.3.2-headers",
                 "C:/Users/Programming/.gradle/caches/transforms-2/files-2.1/c8e850653c2afd60a8151f1bf737926e/wpilibc-cpp-2020.3.2-headers",
-                "C:/Users/Programming/.gradle/caches/transforms-2/files-2.1/07d59ebd6b9d0ec2216b937905ea0d46/wpilibNewCommands-cpp-2020.3.2-headers"
+                "C:/Users/Programming/.gradle/caches/transforms-2/files-2.1/07d59ebd6b9d0ec2216b937905ea0d46/wpilibNewCommands-cpp-2020.3.2-headers",
+                "C:/USERS/TOMTO/.GRADLE/CACHES/TRANSFORMS-2/FILES-2.1/8C6BCAFE8BBC1BDFB35A771922E78306/WPIAPI-CPP-5.18.3-HEADERS",
+                "C:/Users/tomto/.gradle/caches/transforms-2/files-2.1/3ad52374509912665caa757fe0d3933e/wpiapi-cpp-5.19.4-headers",
+                "C:/Users/tomto/.gradle/caches/transforms-2/files-2.1/a7d30a3990789385fa7c2df2fdbc98f5/api-cpp-5.19.4-headers",
+                "C:/Users/tomto/.gradle/caches/transforms-2/files-2.1/ac428c4a4655347f48b737475e270c84/cci-5.18.2-headers",
+                "C:/Users/tomto/.gradle/caches/transforms-2/files-2.1/2c101e52fab2b23ad699aa585e5884fb/core-5.19.4-headers",
+                "C:/Users/tomto/.gradle/caches/transforms-2/files-2.1/2c101e52fab2b23ad699aa585e5884fb/core-5.19.4-headers"
             ],
             "defines": [
                 "_DEBUG",
