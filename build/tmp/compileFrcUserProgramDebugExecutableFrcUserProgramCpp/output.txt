@@ -1,36 +1,32 @@
-See file:///C:/Users/tomto/Desktop/Trajectory-Auto/Infinite-Reecharge-2840/build/tmp/compileFrcUserProgramDebugExecutableFrcUserProgramCpp/output.txt for all output for compileFrcUserProgramDebugExecutableFrcUserProgramCpp.
+See file:///C:/Users/Programming/Documents/GitHub/Infinite-Reecharge-2840/build/tmp/compileFrcUserProgramDebugExecutableFrcUserProgramCpp/output.txt for all output for compileFrcUserProgramDebugExecutableFrcUserProgramCpp.
 compiling Robot.cpp successful.
-C:\Users\tomto\Desktop\Trajectory-Auto\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp:53:20: warning: 'rev::SparkMax::SparkMax(int)' is deprecated: Use the PWMSparkMax class built into WPILib instead [-Wdeprecated-declarations]
+C:\Users\Programming\Documents\GitHub\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp:55:20: warning: 'rev::SparkMax::SparkMax(int)' is deprecated: Use the PWMSparkMax class built into WPILib instead [-Wdeprecated-declarations]
  rev::SparkMax top{5}, intake{4}, bottom{8};
                     ^
-In file included from C:\Users\tomto\Desktop\Trajectory-Auto\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp:40:0:
-C:\Users\tomto\.gradle\caches\transforms-2\files-2.1\7a9befcfe5e5a3e019bafd0bcafa27e9\SparkMax-cpp-1.5.4-headers/rev/SparkMax.h:48:14: note: declared here
+In file included from C:\Users\Programming\Documents\GitHub\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp:41:0:
+C:\Users\Programming\.gradle\caches\transforms-2\files-2.1\5cb4a5f90e5c63182e7e6290e73470a2\SparkMax-cpp-1.5.4-headers/rev/SparkMax.h:48:14: note: declared here
      explicit SparkMax(int channel);
               ^~~~~~~~
-C:\Users\tomto\Desktop\Trajectory-Auto\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp:53:31: warning: 'rev::SparkMax::SparkMax(int)' is deprecated: Use the PWMSparkMax class built into WPILib instead [-Wdeprecated-declarations]
+C:\Users\Programming\Documents\GitHub\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp:55:31: warning: 'rev::SparkMax::SparkMax(int)' is deprecated: Use the PWMSparkMax class built into WPILib instead [-Wdeprecated-declarations]
  rev::SparkMax top{5}, intake{4}, bottom{8};
                                ^
-In file included from C:\Users\tomto\Desktop\Trajectory-Auto\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp:40:0:
-C:\Users\tomto\.gradle\caches\transforms-2\files-2.1\7a9befcfe5e5a3e019bafd0bcafa27e9\SparkMax-cpp-1.5.4-headers/rev/SparkMax.h:48:14: note: declared here
+In file included from C:\Users\Programming\Documents\GitHub\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp:41:0:
+C:\Users\Programming\.gradle\caches\transforms-2\files-2.1\5cb4a5f90e5c63182e7e6290e73470a2\SparkMax-cpp-1.5.4-headers/rev/SparkMax.h:48:14: note: declared here
      explicit SparkMax(int channel);
               ^~~~~~~~
-C:\Users\tomto\Desktop\Trajectory-Auto\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp:53:42: warning: 'rev::SparkMax::SparkMax(int)' is deprecated: Use the PWMSparkMax class built into WPILib instead [-Wdeprecated-declarations]
+C:\Users\Programming\Documents\GitHub\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp:55:42: warning: 'rev::SparkMax::SparkMax(int)' is deprecated: Use the PWMSparkMax class built into WPILib instead [-Wdeprecated-declarations]
  rev::SparkMax top{5}, intake{4}, bottom{8};
                                           ^
-In file included from C:\Users\tomto\Desktop\Trajectory-Auto\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp:40:0:
-C:\Users\tomto\.gradle\caches\transforms-2\files-2.1\7a9befcfe5e5a3e019bafd0bcafa27e9\SparkMax-cpp-1.5.4-headers/rev/SparkMax.h:48:14: note: declared here
+In file included from C:\Users\Programming\Documents\GitHub\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp:41:0:
+C:\Users\Programming\.gradle\caches\transforms-2\files-2.1\5cb4a5f90e5c63182e7e6290e73470a2\SparkMax-cpp-1.5.4-headers/rev/SparkMax.h:48:14: note: declared here
      explicit SparkMax(int channel);
               ^~~~~~~~
-C:\Users\tomto\Desktop\Trajectory-Auto\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp:65:71: warning: 'frc::RobotDrive::RobotDrive(frc::SpeedController&, frc::SpeedController&, frc::SpeedController&, frc::SpeedController&)' is deprecated: Use DifferentialDrive or MecanumDrive classes instead. [-Wdeprecated-declarations]
+C:\Users\Programming\Documents\GitHub\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp:67:71: warning: 'frc::RobotDrive::RobotDrive(frc::SpeedController&, frc::SpeedController&, frc::SpeedController&, frc::SpeedController&)' is deprecated: Use DifferentialDrive or MecanumDrive classes instead. [-Wdeprecated-declarations]
  frc::RobotDrive myRobot{*frontLeft, *backLeft, *frontRight, *backRight};
                                                                        ^
-In file included from C:\Users\tomto\Desktop\Trajectory-Auto\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp:38:0:
-C:\Users\tomto\.gradle\caches\transforms-2\files-2.1\7a3d48d1725fcfa11eafd7076252dbc4\wpilibc-cpp-2020.3.2-headers/frc/RobotDrive.h:120:3: note: declared here
+In file included from C:\Users\Programming\Documents\GitHub\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp:38:0:
+C:\Users\Programming\.gradle\caches\transforms-2\files-2.1\c8e850653c2afd60a8151f1bf737926e\wpilibc-cpp-2020.3.2-headers/frc/RobotDrive.h:120:3: note: declared here
    RobotDrive(SpeedController& frontLeftMotor, SpeedController& rearLeftMotor,
    ^~~~~~~~~~
-C:\Users\tomto\Desktop\Trajectory-Auto\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp: In member function 'virtual void Robot::TeleopPeriodic()':
-C:\Users\tomto\Desktop\Trajectory-Auto\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp:530:9: warning: unused variable 'outtakeSpeed' [-Wunused-variable]
-  double outtakeSpeed = -1.0;
-         ^~~~~~~~~~~~
 
-Finished compileFrcUserProgramDebugExecutableFrcUserProgramCpp, see full log file:///C:/Users/tomto/Desktop/Trajectory-Auto/Infinite-Reecharge-2840/build/tmp/compileFrcUserProgramDebugExecutableFrcUserProgramCpp/output.txt.
+Finished compileFrcUserProgramDebugExecutableFrcUserProgramCpp, see full log file:///C:/Users/Programming/Documents/GitHub/Infinite-Reecharge-2840/build/tmp/compileFrcUserProgramDebugExecutableFrcUserProgramCpp/output.txt.
