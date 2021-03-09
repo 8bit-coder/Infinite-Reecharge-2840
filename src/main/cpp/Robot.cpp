@@ -80,6 +80,10 @@ int16_t accel[3];
 
 static constexpr int kLength = 278;
 
+uint8_t readData[9]; //array to store read data in
+bool aborted = false; 
+frc::I2C *i2c = new frc::I2C(frc::I2C::I2C::Port::kOnboard, 0x54); //Declare arduino as a I2C device with address 0x54
+
 // PWM port 9
 // Must be a PWM header, not MXP or DIO
 //frc::AddressableLED m_led{0};
@@ -178,6 +182,7 @@ void Robot::RobotPeriodic() {
   frc::SmartDashboard::PutNumber("Heading: ",pigeon.GetAbsoluteCompassHeading());
   // Rainbow();
   // m_led.SetData(m_ledBuffer);
+  aborted = i2c->ReadOnly(9, readData);
 }
 bool stageDone = false;
 
