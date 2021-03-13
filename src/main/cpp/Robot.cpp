@@ -84,7 +84,7 @@ static constexpr int kLength = 278;
 
 
 double voltage, oldVoltage, olderVoltage, oldestVoltage, averageVoltage, previousAverageVoltage;
-uint8_t readData[9];
+uint8_t readData[10];
 double outtakeSpeed1A = -0.45;
 double outtakeSpeed1B = 0.4;
 double outtakeSpeed2A = -0.4;
@@ -180,7 +180,7 @@ void Robot::RobotInit() {
 
 void Robot::RobotPeriodic() {
   pigeon.GetAccumGyro(xyz);
-  aborted = i2c->ReadOnly(9, readData); //store 5 bytes to the readData array
+  aborted = i2c->ReadOnly(10, readData); //store 10 bytes to the readData array
   frc::SmartDashboard::PutNumber("Heading z: ", heading());
   frc::SmartDashboard::PutNumber("Timer", timer.Get());
   frc::SmartDashboard::PutNumber("FrontLeft Distance: ", (double)frontLeft->GetSelectedSensorPosition()/6612.5);
@@ -194,6 +194,18 @@ void Robot::RobotPeriodic() {
   frc::SmartDashboard::PutNumber("Heading: ",pigeon.GetAbsoluteCompassHeading());
   frc::SmartDashboard::PutNumber("outtake speed 3A ", outtakeSpeed3A);
   frc::SmartDashboard::PutNumber("outtake speed 3B ", outtakeSpeed3B);
+  frc::SmartDashboard::PutBoolean("i2c to arduino aborted: ", aborted);
+  frc::SmartDashboard::PutBoolean("aborted: ", aborted); //determine whether or not it's aborted and display on dashboard
+  frc::SmartDashboard::PutNumber("unmapped x of ball: ", readData[0]); //display each value given by arduino
+  frc::SmartDashboard::PutNumber("mapped x of ball: ", readData[1]);
+  frc::SmartDashboard::PutNumber("readData 2: ", readData[2]);
+  frc::SmartDashboard::PutNumber("mapped y of ball: ", readData[3]);
+  frc::SmartDashboard::PutNumber("readData 4: ", readData[4]);
+  frc::SmartDashboard::PutNumber("readData 5: ", readData[5]);
+  frc::SmartDashboard::PutNumber("readData 6: ", readData[6]);
+  frc::SmartDashboard::PutBoolean("Ball on left: ", readData[7]);
+  frc::SmartDashboard::PutBoolean("Ball on right: ", readData[8]);
+  frc::SmartDashboard::PutNumber("items seen ", readData[9]);
 
   
   // Rainbow();
@@ -396,94 +408,94 @@ else if (stage == 17) { //drive into the endzone victorious
 // ------------------------------------------------------------
 // powerfuck search path b reds 
 // if (pixy sees ball) 
-switch(stage) {
-  case 0:
-    autospeed = -0.65; //set autospeed
-    compressor->Start(); //start compressor
-    ballIn.Set(frc::DoubleSolenoid::Value::kForward); //extend intake
-  case 1:
-    myRobot.ArcadeDrive(autospeed, 0.0); // drive for 2.5 feet
-    if (avgDist >= 2.5) {
-      stage++; prevTime = currentTime; resetEncoders();
-  }
-    break;
-  case 2:
-    myRobot.ArcadeDrive(0.0, -autoturn); // turn 45 degrees right (heading = 45)
-    if (heading() >= 45-25 && heading() <= 45-20) {
-      stage++; prevTime = currentTime; resetEncoders();
-  }
-    break;
-  case 3:
-    myRobot.ArcadeDrive(autospeed, 0.0); //drive for a lil over 10.5 ft
-    intake.Set(0.4); //intake two balls on the way
-    if (avgDist >= 10.6066) {
-      stage++; prevTime = currentTime; resetEncoders();
-    }
-    break;
-  case 4:
-    myRobot.ArcadeDrive (0.0, -autoturn); // turn 90 degrees left (heading = 315)
-    if (heading() >= 355 || heading() <= 5) {
-      stage++; prevTime = currentTime; resetEncoders();
-    }
-    break;
-  case 5: 
-    myRobot.ArcadeDrive(autospeed, 0.0); // drive for 7.07107 ft
-    intake.Set(0.4); //pick up a ball on the way
-    if (avgDist >= 11.5) {
-      stage++; prevTime = currentTime; resetEncoders();
-    }
-    break;
-  case 6:
-    myRobot.ArcadeDrive(0.0, autoturn); //turn 45 degrees right (heading = 0)
-    if (heading() >= 360-25 && heading <= 360 - 20) {
-      stage++; prevTime = currentTime; resetEncoders();
-    }
-  break;
-  case 7:
-    myRobot.ArcadeDrive(autospeed, 0.0);
-    if ()
-    break;
-}
-//powerfuck search path b bluess I'm probably doing this wrong btw but whatevs
-// else if (pixy does not see ball)
-switch(stage) {
-  case 0:
-    autospeed = -0.65; //set autospeed
-    compressor->Start(); //start compressor
-    ballIn.Set(frc::DoubleSolenoid::Value::kForward); //extend intake
+// switch(stage) {
+//   case 0:
+//     autospeed = -0.65; //set autospeed
+//     compressor->Start(); //start compressor
+//     ballIn.Set(frc::DoubleSolenoid::Value::kForward); //extend intake
+//   case 1:
+//     myRobot.ArcadeDrive(autospeed, 0.0); // drive for 2.5 feet
+//     if (avgDist >= 2.5) {
+//       stage++; prevTime = currentTime; resetEncoders();
+//   }
+//     break;
+//   case 2:
+//     myRobot.ArcadeDrive(0.0, -autoturn); // turn 45 degrees right (heading = 45)
+//     if (heading() >= 45-25 && heading() <= 45-20) {
+//       stage++; prevTime = currentTime; resetEncoders();
+//   }
+//     break;
+//   case 3:
+//     myRobot.ArcadeDrive(autospeed, 0.0); //drive for a lil over 10.5 ft
+//     intake.Set(0.4); //intake two balls on the way
+//     if (avgDist >= 10.6066) {
+//       stage++; prevTime = currentTime; resetEncoders();
+//     }
+//     break;
+//   case 4:
+//     myRobot.ArcadeDrive (0.0, -autoturn); // turn 90 degrees left (heading = 315)
+//     if (heading() >= 355 || heading() <= 5) {
+//       stage++; prevTime = currentTime; resetEncoders();
+//     }
+//     break;
+//   case 5: 
+//     myRobot.ArcadeDrive(autospeed, 0.0); // drive for 7.07107 ft
+//     intake.Set(0.4); //pick up a ball on the way
+//     if (avgDist >= 11.5) {
+//       stage++; prevTime = currentTime; resetEncoders();
+//     }
+//     break;
+//   case 6:
+//     myRobot.ArcadeDrive(0.0, autoturn); //turn 45 degrees right (heading = 0)
+//     if (heading() >= 360-25 && heading <= 360 - 20) {
+//       stage++; prevTime = currentTime; resetEncoders();
+//     }
+//   break;
+//   case 7:
+//     myRobot.ArcadeDrive(autospeed, 0.0);
+//     if ()
+//     break;
+// }
+// //powerfuck search path b bluess I'm probably doing this wrong btw but whatevs
+// // else if (pixy does not see ball)
+// switch(stage) {
+//   case 0:
+//     autospeed = -0.65; //set autospeed
+//     compressor->Start(); //start compressor
+//     ballIn.Set(frc::DoubleSolenoid::Value::kForward); //extend intake
 
-  case 1:
-    myRobot.ArcadeDrive(autospeed, 0.0); // drive for 10 feet
-    if (avgDist >= 10) {
-      stage++; prevTime = currentTime; resetEncoders();
-  }
-    break;
-  case 2:
-    myRobot.ArcadeDrive(0.0, -autoturn); // turn 45 degrees left (heading = 315)
-    if (heading() >= 315+20 && heading() <= 315+30) {
-      stage++; prevTime = currentTime; resetEncoders();
-  }
-    break;
-  case 3:
-    myRobot.ArcadeDrive(autospeed, 0.0); //drive for 12.5 feet
-    intake.Set(0.4); //intake two balls on the way
-    if (avgDist >= 7.075) {
-      stage++; prevTime = currentTime; resetEncoders();
-    }
-    break;
-  case 4:
-    myRobot.ArcadeDrive (0.0, autoturn); // turn 90 degrees right (heading = 45)
-    if (heading() >= 355 || heading() <= 5) {
-      stage++; prevTime = currentTime; resetEncoders();
-    }
-    break;
-  case 5: 
-    myRobot.ArcadeDrive(autospeed, 0.0); // drive for a little over 10 feet and hit endzone yay!
-    intake.Set(0.4); //pick up a ball on the way
-    if (avgDist >= 11.5) {
-      stage++; prevTime = currentTime; resetEncoders();
-    }
-}
+//   case 1:
+//     myRobot.ArcadeDrive(autospeed, 0.0); // drive for 10 feet
+//     if (avgDist >= 10) {
+//       stage++; prevTime = currentTime; resetEncoders();
+//   }
+//     break;
+//   case 2:
+//     myRobot.ArcadeDrive(0.0, -autoturn); // turn 45 degrees left (heading = 315)
+//     if (heading() >= 315+20 && heading() <= 315+30) {
+//       stage++; prevTime = currentTime; resetEncoders();
+//   }
+//     break;
+//   case 3:
+//     myRobot.ArcadeDrive(autospeed, 0.0); //drive for 12.5 feet
+//     intake.Set(0.4); //intake two balls on the way
+//     if (avgDist >= 7.075) {
+//       stage++; prevTime = currentTime; resetEncoders();
+//     }
+//     break;
+//   case 4:
+//     myRobot.ArcadeDrive (0.0, autoturn); // turn 90 degrees right (heading = 45)
+//     if (heading() >= 355 || heading() <= 5) {
+//       stage++; prevTime = currentTime; resetEncoders();
+//     }
+//     break;
+//   case 5: 
+//     myRobot.ArcadeDrive(autospeed, 0.0); // drive for a little over 10 feet and hit endzone yay!
+//     intake.Set(0.4); //pick up a ball on the way
+//     if (avgDist >= 11.5) {
+//       stage++; prevTime = currentTime; resetEncoders();
+//     }
+// }
 
 // if (stage == 0) {
 // myRobot.ArcadeDrive(autospeed, 0.0);
