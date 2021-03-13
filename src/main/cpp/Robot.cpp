@@ -396,95 +396,93 @@ else if (stage == 17) { //drive into the endzone victorious
 // ------------------------------------------------------------
 // powerfuck search path b reds 
 // if (pixy sees ball) 
-switch(stage){
+switch(stage) {
   case 0:
-    myRobot.ArcadeDrive(0.0, autoturn); //wut
-    if (heading() >= 352.8 && heading() <= 355.8){
-      stage++; prevTime = currentTime; resetEncoders();
-    }
-    break;
+    autospeed = -0.65; //set autospeed
+    compressor->Start(); //start compressor
+    ballIn.Set(frc::DoubleSolenoid::Value::kForward); //extend intake
   case 1:
-    myRobot.ArcadeDrive(autospeed, 0.0);//drive for a little over 5 feet
-    if (avgDist >= 5.025){
+    myRobot.ArcadeDrive(autospeed, 0.0); // drive for 2.5 feet
+    if (avgDist >= 2.5) {
       stage++; prevTime = currentTime; resetEncoders();
-    }
+  }
     break;
   case 2:
-    myRobot.ArcadeDrive(0.0, autoturn); //turn like about 39.3 degrees
-    if (heading() >= 37.8 && heading() <= 40.8){
+    myRobot.ArcadeDrive(0.0, -autoturn); // turn 45 degrees right (heading = 45)
+    if (heading() >= 45-25 && heading() <= 45-20) {
       stage++; prevTime = currentTime; resetEncoders();
-    }
+  }
     break;
   case 3:
-    myRobot.ArcadeDrive(autospeed, 0.0); //drive for a little over 7 feet
-    if (avgDist >= 7.075){
+    myRobot.ArcadeDrive(autospeed, 0.0); //drive for a lil over 10.5 ft
+    intake.Set(0.4); //intake two balls on the way
+    if (avgDist >= 10.6066) {
       stage++; prevTime = currentTime; resetEncoders();
     }
     break;
   case 4:
-    myRobot.ArcadeDrive(0.0, autoturn); // turn like about 90 degrees
-    if (heading() >= 88.5 && heading() <= 91.5){
+    myRobot.ArcadeDrive (0.0, -autoturn); // turn 90 degrees left (heading = 315)
+    if (heading() >= 355 || heading() <= 5) {
       stage++; prevTime = currentTime; resetEncoders();
     }
     break;
-  case 5:
-    myRobot.ArcadeDrive(autospeed, 0.0); //drive for a little over 7 feet
-    if (avgDist >= 7.075){
+  case 5: 
+    myRobot.ArcadeDrive(autospeed, 0.0); // drive for 7.07107 ft
+    intake.Set(0.4); //pick up a ball on the way
+    if (avgDist >= 11.5) {
       stage++; prevTime = currentTime; resetEncoders();
     }
     break;
   case 6:
-    myRobot.ArcadeDrive(0.0, autoturn); //turn like about 45 degrees
-    if (heading() >= 43.5 && heading() <= 46.5){
+    myRobot.ArcadeDrive(0.0, autoturn); //turn 45 degrees right (heading = 0)
+    if (heading() >= 360-25 && heading <= 360 - 20) {
       stage++; prevTime = currentTime; resetEncoders();
     }
-    break;
+  break;
   case 7:
-    myRobot.ArcadeDrive(autospeed, 0.0); //drive for like 12.5 feet
-    if (avgDist >= 12.5){
-      stage++; prevTime = currentTime; resetEncoders();
-    }
+    myRobot.ArcadeDrive(autospeed, 0.0);
+    if ()
     break;
 }
 //powerfuck search path b bluess I'm probably doing this wrong btw but whatevs
 // else if (pixy does not see ball)
 switch(stage) {
   case 0:
-    myRobot.ArcadeDrive(0.0, autoturn); //begin by turning the robot about 1.2 degrees (nightmare, nightmare, nightmare....)
-    if (heading() > 0 && heading() <= 1.2) {
-      stage++; prevTime = currentTime; resetEncoders();
-  } 
-    break;
+    autospeed = -0.65; //set autospeed
+    compressor->Start(); //start compressor
+    ballIn.Set(frc::DoubleSolenoid::Value::kForward); //extend intake
+
   case 1:
-    myRobot.ArcadeDrive(autospeed, 0.0); // drive for like a little over 12 feet
-    if (avgDist >= 12.5025) {
+    myRobot.ArcadeDrive(autospeed, 0.0); // drive for 10 feet
+    if (avgDist >= 10) {
       stage++; prevTime = currentTime; resetEncoders();
   }
     break;
   case 2:
-    myRobot.ArcadeDrive(0.0, autoturn); // turn about 43.8 degrees
-    if (heading() >= 42.3 && heading() <= 45.3) {
+    myRobot.ArcadeDrive(0.0, -autoturn); // turn 45 degrees left (heading = 315)
+    if (heading() >= 315+20 && heading() <= 315+30) {
       stage++; prevTime = currentTime; resetEncoders();
   }
     break;
   case 3:
-    myRobot.ArcadeDrive(autospeed, 0.0); //drive for a little over 7 feet
+    myRobot.ArcadeDrive(autospeed, 0.0); //drive for 12.5 feet
+    intake.Set(0.4); //intake two balls on the way
     if (avgDist >= 7.075) {
       stage++; prevTime = currentTime; resetEncoders();
     }
     break;
   case 4:
-    myRobot.ArcadeDrive (0.0, -autoturn); // turn 45 degrees
-    if (heading() >= 43.5 && heading() <= 46.5) {
+    myRobot.ArcadeDrive (0.0, autoturn); // turn 90 degrees right (heading = 45)
+    if (heading() >= 355 || heading() <= 5) {
       stage++; prevTime = currentTime; resetEncoders();
     }
     break;
   case 5: 
-    myRobot.ArcadeDrive(autospeed, 0.0); // drive for a little over 5 feet and hit endzone yay!
-    if (avgDist >= 5.3) {
+    myRobot.ArcadeDrive(autospeed, 0.0); // drive for a little over 10 feet and hit endzone yay!
+    intake.Set(0.4); //pick up a ball on the way
+    if (avgDist >= 11.5) {
       stage++; prevTime = currentTime; resetEncoders();
     }
-
 }
 
 // if (stage == 0) {
