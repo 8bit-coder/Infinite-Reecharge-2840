@@ -428,7 +428,7 @@ switch(stage) {
     break;
   case 2:
     myRobot.ArcadeDrive(0.0, autoturn); // turn 45 degrees right (heading = 45)
-    if (heading() >= 45 - 35 && heading() <= 45-25) {
+    if (heading() >= 45 - 35 && heading() <= 45-26) {
       stage++; prevTime = currentTime; resetEncoders();
   }
     break;
@@ -441,7 +441,7 @@ switch(stage) {
     break;
   case 4:
     myRobot.ArcadeDrive (0.0, -autoturn); // turn 90 degrees left (heading = 315)
-    if (heading() >= 349 && heading() <= 359) {
+    if (heading() >= 349 && heading() <= 357) {
       stage++; prevTime = currentTime; resetEncoders();
     }
     break;
