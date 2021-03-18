@@ -47,12 +47,13 @@
 // #include <frc/AddressableLED.h>
 #include <math.h>
 
+frc::PowerDistributionPanel pdp = new frc::PowerDistributionPanel();
 cs::UsbCamera camera0;
 cs::UsbCamera camera1;
 cs::VideoSink server;
 frc::Joystick one{0}, two{1};
 //rev::SparkMax intake{4}, outtake{5};
-rev::SparkMax top{5}, intake{0}, bottom{8};
+rev::SparkMax intake{0};
 frc::Servo pan{6},tilt{7};
 int stage = 0;
 double xyz[] = {0.0, 0.0, 0.0};
@@ -63,6 +64,11 @@ ctre::phoenix::motorcontrol::can::WPI_TalonFX *frontRight = new ctre::phoenix::m
 ctre::phoenix::motorcontrol::can::WPI_TalonFX *backLeft= new ctre::phoenix::motorcontrol::can::WPI_TalonFX(3);
 ctre::phoenix::motorcontrol::can::WPI_TalonFX *backRight = new ctre::phoenix::motorcontrol::can::WPI_TalonFX(0);
 ctre::phoenix::motorcontrol::can::TalonSRX *talon = new ctre::phoenix::motorcontrol::can::TalonSRX(10);
+
+ctre::phoenix::motorcontrol::can::WPI_TalonFX *top = new ctre::phoenix::motorcontrol::can::WPI_TalonFX(4);
+ctre::phoenix::motorcontrol::can::WPI_TalonFX *bottom = new ctre::phoenix::motorcontrol::can::WPI_TalonFX(5);
+double outtakeSpeedHigh = 0, outtakeSpeedLow = 0, outtakeVoltHigh = 0, outtakeVoltLow = 0;
+
 
 frc::RobotDrive myRobot{*frontLeft, *backLeft, *frontRight, *backRight};
 frc::Timer timer, shootTimer;
@@ -662,21 +668,54 @@ else {
   //   ballStorage.Set(frc::DoubleSolenoid::Value::kOff);
   // }
 
+  // if (one.GetRawButton(2)) {
+  //   top.Set(outtakeSpeed1A);
+  //   bottom.Set(outtakeSpeed1B);
+  // }
+  // else if (!one.GetRawButton(2)&&one.GetRawButton(3)) {
+  //   top.Set(outtakeSpeed2A);
+  //   bottom.Set(outtakeSpeed2B);
+  // }
+  // else if (!one.GetRawButton(2)&&!one.GetRawButton(3)&&one.GetRawButton(4)) {
+  //   top.Set(outtakeSpeed3A);
+  //   bottom.Set(outtakeSpeed3B);
+  // }
+  // else if (!one.GetRawButton(2) && !one.GetRawButton(3)&&!one.GetRawButton(4)) {
+  //   top.Set(0.0);
+  //   bottom.Set(0.0);
+  // }
   if (one.GetRawButton(2)) {
-    top.Set(outtakeSpeed1A);
-    bottom.Set(outtakeSpeed1B);
+    outtakeSpeedHigh = 5;
+    outtakeSpeedLow = 5;
   }
-  else if (!one.GetRawButton(2)&&one.GetRawButton(3)) {
-    top.Set(outtakeSpeed2A);
-    bottom.Set(outtakeSpeed2B);
+  else if (one.GetRawButton(3)) {
+    outtakeSpeedHigh = 10;
+    outtakeSpeedLow = 10;
   }
-  else if (!one.GetRawButton(2)&&!one.GetRawButton(3)&&one.GetRawButton(4)) {
-    top.Set(outtakeSpeed3A);
-    bottom.Set(outtakeSpeed3B);
-  }
-  else if (!one.GetRawButton(2) && !one.GetRawButton(3)&&!one.GetRawButton(4)) {
-    top.Set(0.0);
-    bottom.Set(0.0);
+  else if (one.GetRawButton(4)) {
+    outtakeSpeedHigh = 15;
+    outtakeSpeedLow = 15;
+}
+  else {
+    outtakeSpeedHigh = 0;
+    outtakeSpeedLow = 0;
+}
+
+  if (one.GetRawButton(2) || one.GetRawButton(3) || one.GetRawButton(4)) {
+    if (top->GetSelectedSensorVelocity()/2204.16666 < outtakeSpeedHigh) {
+      outtakeVoltHigh += 0.02;
+    }
+    else if (top->GetSelectedSensorVelocity()/2204.16666 > outtakeSpeedHigh) {
+      outtakeVoltHigh -= 0.02;
+    }
+    if (bottom->GetSelectedSensorVelocity()/2204.16666 < outtakeSpeedLow) {
+      outtakeVoltLow += 0.02;
+    }
+    else if (bottom->GetSelectedSensorVelocity()/2204.16666 > outtakeSpeedLow) {
+      outtakeVoltLow -= 0.02;
+    }
+    top->Set(outtakeVoltHigh);
+    bottom->Set(outtakeVoltLow);
   }
   
   if(one.GetRawButton(6)) {

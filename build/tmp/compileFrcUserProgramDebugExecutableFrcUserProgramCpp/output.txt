@@ -1,27 +1,13 @@
 See file:///C:/Users/Programming/Documents/GitHub/Infinite-Reecharge-2840/build/tmp/compileFrcUserProgramDebugExecutableFrcUserProgramCpp/output.txt for all output for compileFrcUserProgramDebugExecutableFrcUserProgramCpp.
 compiling Robot.cpp successful.
-C:\Users\Programming\Documents\GitHub\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp:55:20: warning: 'rev::SparkMax::SparkMax(int)' is deprecated: Use the PWMSparkMax class built into WPILib instead [-Wdeprecated-declarations]
- rev::SparkMax top{5}, intake{0}, bottom{8};
-                    ^
+C:\Users\Programming\Documents\GitHub\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp:55:23: warning: 'rev::SparkMax::SparkMax(int)' is deprecated: Use the PWMSparkMax class built into WPILib instead [-Wdeprecated-declarations]
+ rev::SparkMax intake{0};
+                       ^
 In file included from C:\Users\Programming\Documents\GitHub\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp:41:0:
 C:\Users\Programming\.gradle\caches\transforms-2\files-2.1\5cb4a5f90e5c63182e7e6290e73470a2\SparkMax-cpp-1.5.4-headers/rev/SparkMax.h:48:14: note: declared here
      explicit SparkMax(int channel);
               ^~~~~~~~
-C:\Users\Programming\Documents\GitHub\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp:55:31: warning: 'rev::SparkMax::SparkMax(int)' is deprecated: Use the PWMSparkMax class built into WPILib instead [-Wdeprecated-declarations]
- rev::SparkMax top{5}, intake{0}, bottom{8};
-                               ^
-In file included from C:\Users\Programming\Documents\GitHub\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp:41:0:
-C:\Users\Programming\.gradle\caches\transforms-2\files-2.1\5cb4a5f90e5c63182e7e6290e73470a2\SparkMax-cpp-1.5.4-headers/rev/SparkMax.h:48:14: note: declared here
-     explicit SparkMax(int channel);
-              ^~~~~~~~
-C:\Users\Programming\Documents\GitHub\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp:55:42: warning: 'rev::SparkMax::SparkMax(int)' is deprecated: Use the PWMSparkMax class built into WPILib instead [-Wdeprecated-declarations]
- rev::SparkMax top{5}, intake{0}, bottom{8};
-                                          ^
-In file included from C:\Users\Programming\Documents\GitHub\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp:41:0:
-C:\Users\Programming\.gradle\caches\transforms-2\files-2.1\5cb4a5f90e5c63182e7e6290e73470a2\SparkMax-cpp-1.5.4-headers/rev/SparkMax.h:48:14: note: declared here
-     explicit SparkMax(int channel);
-              ^~~~~~~~
-C:\Users\Programming\Documents\GitHub\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp:67:71: warning: 'frc::RobotDrive::RobotDrive(frc::SpeedController&, frc::SpeedController&, frc::SpeedController&, frc::SpeedController&)' is deprecated: Use DifferentialDrive or MecanumDrive classes instead. [-Wdeprecated-declarations]
+C:\Users\Programming\Documents\GitHub\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp:72:71: warning: 'frc::RobotDrive::RobotDrive(frc::SpeedController&, frc::SpeedController&, frc::SpeedController&, frc::SpeedController&)' is deprecated: Use DifferentialDrive or MecanumDrive classes instead. [-Wdeprecated-declarations]
  frc::RobotDrive myRobot{*frontLeft, *backLeft, *frontRight, *backRight};
                                                                        ^
 In file included from C:\Users\Programming\Documents\GitHub\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp:38:0:
