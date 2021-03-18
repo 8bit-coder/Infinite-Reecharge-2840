@@ -551,7 +551,7 @@ switch(stage) {
 //   myRobot.ArcadeDrive(-autospeed, 0.0); 
 //   if (avgDist <= -3.33772234) {stage++; prevTime = currentTime; resetEncoders();}
 // }
-// else if (stage == 9) {
+// else if (stage == 9) {//////////////////////////////////////////
 //   myRobot.ArcadeDrive(autospeed, 0.0);
 //   if (avgDist >= 10) {stage++; prevTime = currentTime; resetEncoders();}
 // }
