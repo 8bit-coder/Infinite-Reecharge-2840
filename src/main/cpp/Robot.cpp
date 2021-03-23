@@ -69,6 +69,7 @@ ctre::phoenix::motorcontrol::can::TalonSRX *talon = new ctre::phoenix::motorcont
 ctre::phoenix::motorcontrol::can::WPI_TalonFX *top = new ctre::phoenix::motorcontrol::can::WPI_TalonFX(4);
 ctre::phoenix::motorcontrol::can::WPI_TalonFX *bottom = new ctre::phoenix::motorcontrol::can::WPI_TalonFX(5);
 double outtakeSpeedHigh = 0, outtakeSpeedLow = 0, outtakeVoltHigh = 0, outtakeVoltLow = 0;
+int smoothing = 4;
 
 
 frc::RobotDrive myRobot{*frontLeft, *backLeft, *frontRight, *backRight};
@@ -182,7 +183,53 @@ void Robot::RobotInit() {
   backLeft->SetSelectedSensorPosition(0.0);
   frontRight->SetSelectedSensorPosition(0.0);
   backRight->SetSelectedSensorPosition(0.0);
+  top->ConfigFactoryDefault();
+  bottom->ConfigFactoryDefault();
+  top->ConfigSelectedFeedbackSensor(ctre::phoenix::motorcontrol::FeedbackDevice::IntegratedSensor, 0, 10);
+  bottom->ConfigSelectedFeedbackSensor(ctre::phoenix::motorcontrol::FeedbackDevice::IntegratedSensor, 0, 10);
+  bottom->SetInverted(ctre::phoenix::motorcontrol::TalonFXInvertType::CounterClockwise);
+  top->SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_13_Base_PIDF0, 10, 10);
+  top->SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_10_MotionMagic, 10, 10);
+  bottom->SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_13_Base_PIDF0, 10, 10);
+  bottom->SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_10_MotionMagic, 10, 10);
 
+  top->ConfigNominalOutputForward(0, 10);
+  top->ConfigNominalOutputReverse(0, 10);
+  top->ConfigPeakOutputForward(1, 10);
+  top->ConfigPeakOutputReverse(-1, 10);
+
+  top->SelectProfileSlot(0, 0);
+  top->Config_kF(0, 0.3, 10);
+  top->Config_kP(0, 0.1, 10);
+  top->Config_kI(0, 0.0, 10);
+  top->Config_kD(0, 0.0, 10);
+
+  /* Set acceleration and vcruise velocity - see documentation */
+  top->ConfigMotionCruiseVelocity(1500, 10);
+  top->ConfigMotionAcceleration(1500, 10);
+  /* Zero the sensor */
+  top->SetSelectedSensorPosition(0, 0, 10);
+
+  bottom->ConfigNominalOutputForward(0, 10);
+  bottom->ConfigNominalOutputReverse(0, 10);
+  bottom->ConfigPeakOutputForward(1, 10);
+  bottom->ConfigPeakOutputReverse(-1, 10);
+
+  bottom->SelectProfileSlot(0, 0);
+  bottom->Config_kF(0, 0.3, 10);
+  bottom->Config_kP(0, 0.1, 10);
+  bottom->Config_kI(0, 0.0, 10);
+  bottom->Config_kD(0, 0.0, 10);
+
+  /* Set acceleration and vcruise velocity - see documentation */
+  bottom->ConfigMotionCruiseVelocity(1500, 10);
+  bottom->ConfigMotionAcceleration(1500, 10);
+  /* Zero the sensor */
+  bottom->SetSelectedSensorPosition(0, 0, 10);  
+
+  //smoothing things:
+  bottom->ConfigMotionSCurveStrength(smoothing, 0);
+  top->ConfigMotionSCurveStrength(smoothing, 0);
 }
 
 void Robot::RobotPeriodic() {
@@ -775,22 +822,22 @@ else {
 //   }
   if (one.GetRawButton(1)){
     top->Set(1.0);
-    bottom->Set(-1.0);
+    bottom->Set(1.0);
     compressor->Stop();
   }
   else if (one.GetRawButton(2)) {
-    top->SetVoltage((units::volt_t) 5);
-    bottom->SetVoltage((units::volt_t) 5);
+    top->Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, 1500);
+    bottom->Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, 1500);
     compressor->Stop();
   }
   else if (one.GetRawButton(3)) {
-    top->Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, 10*2204.16666);
-    bottom->Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, 10*2204.16666);
+    top->Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, 3000);
+    bottom->Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, 3000);
     compressor->Stop();
   }
   else if (one.GetRawButton(4)) {
-    top->Set(ctre::phoenix::motorcontrol::ControlMode::MusicTone, 440);
-    bottom->Set(ctre::phoenix::motorcontrol::ControlMode::MusicTone, 440);
+    top->Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, 4500);
+    bottom->Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, 4500);
     compressor->Stop();
   }
   else if (one.GetRawButton(10)){
