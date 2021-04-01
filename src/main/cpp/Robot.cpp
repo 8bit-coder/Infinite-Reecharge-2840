@@ -69,7 +69,7 @@ ctre::phoenix::motorcontrol::can::TalonSRX *talon = new ctre::phoenix::motorcont
 ctre::phoenix::motorcontrol::can::WPI_TalonFX *top = new ctre::phoenix::motorcontrol::can::WPI_TalonFX(4);
 ctre::phoenix::motorcontrol::can::WPI_TalonFX *bottom = new ctre::phoenix::motorcontrol::can::WPI_TalonFX(5);
 double outtakeSpeedHigh = 0, outtakeSpeedLow = 0, outtakeVoltHigh = 0, outtakeVoltLow = 0;
-int smoothing = 4;
+int smoothing = 6;
 
 
 frc::RobotDrive myRobot{*frontLeft, *backLeft, *frontRight, *backRight};
@@ -185,51 +185,6 @@ void Robot::RobotInit() {
   backRight->SetSelectedSensorPosition(0.0);
   top->ConfigFactoryDefault();
   bottom->ConfigFactoryDefault();
-  top->ConfigSelectedFeedbackSensor(ctre::phoenix::motorcontrol::FeedbackDevice::IntegratedSensor, 0, 10);
-  bottom->ConfigSelectedFeedbackSensor(ctre::phoenix::motorcontrol::FeedbackDevice::IntegratedSensor, 0, 10);
-  bottom->SetInverted(ctre::phoenix::motorcontrol::TalonFXInvertType::CounterClockwise);
-  top->SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_13_Base_PIDF0, 10, 10);
-  top->SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_10_MotionMagic, 10, 10);
-  bottom->SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_13_Base_PIDF0, 10, 10);
-  bottom->SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_10_MotionMagic, 10, 10);
-
-  top->ConfigNominalOutputForward(0, 10);
-  top->ConfigNominalOutputReverse(0, 10);
-  top->ConfigPeakOutputForward(1, 10);
-  top->ConfigPeakOutputReverse(-1, 10);
-
-  top->SelectProfileSlot(0, 0);
-  top->Config_kF(0, 0.3, 10);
-  top->Config_kP(0, 0.1, 10);
-  top->Config_kI(0, 0.0, 10);
-  top->Config_kD(0, 0.0, 10);
-
-  /* Set acceleration and vcruise velocity - see documentation */
-  top->ConfigMotionCruiseVelocity(1500, 10);
-  top->ConfigMotionAcceleration(1500, 10);
-  /* Zero the sensor */
-  top->SetSelectedSensorPosition(0, 0, 10);
-
-  bottom->ConfigNominalOutputForward(0, 10);
-  bottom->ConfigNominalOutputReverse(0, 10);
-  bottom->ConfigPeakOutputForward(1, 10);
-  bottom->ConfigPeakOutputReverse(-1, 10);
-
-  bottom->SelectProfileSlot(0, 0);
-  bottom->Config_kF(0, 0.3, 10);
-  bottom->Config_kP(0, 0.1, 10);
-  bottom->Config_kI(0, 0.0, 10);
-  bottom->Config_kD(0, 0.0, 10);
-
-  /* Set acceleration and vcruise velocity - see documentation */
-  bottom->ConfigMotionCruiseVelocity(1500, 10);
-  bottom->ConfigMotionAcceleration(1500, 10);
-  /* Zero the sensor */
-  bottom->SetSelectedSensorPosition(0, 0, 10);  
-
-  //smoothing things:
-  bottom->ConfigMotionSCurveStrength(smoothing, 0);
-  top->ConfigMotionSCurveStrength(smoothing, 0);
 }
 
 void Robot::RobotPeriodic() {
@@ -245,8 +200,8 @@ void Robot::RobotPeriodic() {
   // frc::SmartDashboard::PutNumber("FrontRight Velocity: ", (double)frontRight->GetSelectedSensorVelocity()/6612.5);
   // frc::SmartDashboard::PutNumber("Backleft Velocity: ", (double)backLeft->GetSelectedSensorVelocity()/6612.5);
   // frc::SmartDashboard::PutNumber("Backright Velocity: ", (double)backRight->GetSelectedSensorVelocity()/6612.5);
-  frc::SmartDashboard::PutNumber("Top Velocity: ", (double)top->GetSelectedSensorVelocity()/2204.16666);
-  frc::SmartDashboard::PutNumber("Bottom Velocity: ", (double)bottom->GetSelectedSensorVelocity()/2204.16666);
+  // frc::SmartDashboard::PutNumber("Top Velocity: ", (double)top->GetSelectedSensorVelocity());
+  // frc::SmartDashboard::PutNumber("Bottom Velocity: ", (double)bottom->GetSelectedSensorVelocity());
   // frc::SmartDashboard::PutNumber("Heading: ",pigeon.GetAbsoluteCompassHeading());
   // frc::SmartDashboard::PutNumber("outtake speed 3A ", outtakeSpeed3A);
   // frc::SmartDashboard::PutNumber("outtake speed 3B ", outtakeSpeed3B);
@@ -267,9 +222,9 @@ void Robot::RobotPeriodic() {
   // Rainbow();
   // m_led.SetData(m_ledBuffer);
 }
-bool stageDone = false;
 
 void Robot::AutonomousInit() {
+  myRobot.SetSafetyEnabled(false);
   if (readData[9] > 0) {redAuto = true;}
   else {redAuto = false;}
   timer.Reset();
@@ -283,7 +238,6 @@ void Robot::AutonomousInit() {
   prevTime = 0;
   stage = 0;
   resetEncoders();
-  stageDone = false;
 }
 
 
@@ -296,49 +250,233 @@ void Robot::AutonomousPeriodic() {
   // frc::SmartDashboard::PutNumber("Stage Time: ", currentTime-prevTime);
   frc::SmartDashboard::PutNumber("Stage: ", stage+1);
   // currentTime = timer.Get();
-  frc::SmartDashboard::PutNumber("Heading: ", heading());
+  // frc::SmartDashboard::PutNumber("Heading: ", heading());
+  //best time is 16.57 not including penalties, 26.57 including penalties
   switch(stage) {
   case 0:
     autospeed = -0.5; //set autospeed
-    autoturn = 0.45;
-    compressor->Start(); //start compressor
-    ballIn.Set(frc::DoubleSolenoid::Value::kForward); //extend intake
+    autoturn = 0.4;
+    compressor->Stop();
+    ballIn.Set(frc::DoubleSolenoid::Value::kReverse); //extend intake
     stage++; prevTime = currentTime; resetEncoders();
     break;
   case 1:
     myRobot.ArcadeDrive(autospeed, 0.08); // drive for 5 feet
-    intake.Set(0.4); //intake one ball on the way
-    if (avgDist >= 12.5) {
+    if (avgDist >= 4.5) {
       stage++; prevTime = currentTime; resetEncoders();
   }
     break;
   case 2:
     myRobot.ArcadeDrive(0.0, -autoturn); // turn 45 degrees right (heading = 45)
-    if (heading() >= 296.565+9 && heading() <= 296.565+19) {
+    if (heading() >= 275 + 10 && heading() <= 275 + 20) {
       stage++; prevTime = currentTime; resetEncoders();
   }
     break;
   case 3:
     myRobot.ArcadeDrive(autospeed, 0.0); //drive for a lil over 10.5 ft
-    intake.Set(0.4); //intake one ball on the way
-    if (avgDist >= 2.236+2.5) {
+    if (avgDist >= 5) {
       stage++; prevTime = currentTime; resetEncoders();
     }
     break;
   case 4:
     myRobot.ArcadeDrive (0.0, autoturn); // turn 90 degrees left (heading = 315)
-    if (heading() <= 350-8 && heading() >= 340-8) {
+    if (heading() >= 345 && heading() <= 355) {
       stage++; prevTime = currentTime; resetEncoders();
     }
     break;
   case 5: 
-    myRobot.ArcadeDrive(-1.0, 0.0); // drive for 7.07107 ft
-    intake.Set(0.4); //pick up a ball on the way
-    if (avgDist >= 6) {
+    myRobot.ArcadeDrive(autospeed, 0.0); // drive for 7.07107 ft
+    if (avgDist >= 10.7) {
       stage++; prevTime = currentTime; resetEncoders();
     }
     break;
+  case 6:
+    myRobot.ArcadeDrive(0.0, autoturn);
+    if (heading() <= 47 && heading() >= 37) {
+      stage++; prevTime = currentTime; resetEncoders();
+    }
+    break;
+  case 7: 
+    myRobot.ArcadeDrive(autospeed, 0.0); // drive for 7.07107 ft
+    if (avgDist >= 5.83) {
+      stage++; prevTime = currentTime; resetEncoders();
+    }
+    break;
+  case 8:
+    myRobot.ArcadeDrive(0.0, -autoturn);
+    if (heading() >= 15 && heading() <= 25) {
+      stage++; prevTime = currentTime; resetEncoders();
+    }
+    break;
+  case 9:
+    myRobot.ArcadeDrive(autospeed, 0.0);
+    if (avgDist >= 2.3) {
+      stage++; prevTime = currentTime; resetEncoders();
+    }
+    break;
+  case 10:
+    myRobot.ArcadeDrive(0.0, -autoturn);
+    if (heading() <= 275 + 35 && heading() >= 275 + 25) {
+      stage++; prevTime = currentTime; resetEncoders();
+    }
+    break;
+  case 11:
+    myRobot.ArcadeDrive(autospeed, 0.0);
+    if (avgDist >= 3.5) {
+      stage++; prevTime = currentTime; resetEncoders();
+    }
+    break;
+  case 12:
+    myRobot.ArcadeDrive(0.0, -autoturn);
+    if (heading() >= 180 + 20 && heading() <= 180 + 30) {
+      stage++; prevTime = currentTime; resetEncoders();
+    }
+    break;
+  case 13:
+    myRobot.ArcadeDrive(autospeed, 0.0);
+    if (avgDist >= 5) {
+      stage++; prevTime = currentTime; resetEncoders();
+    }
+    break;
+  case 14:
+    myRobot.ArcadeDrive(0.0, -autoturn);
+    if (heading() <= 90 + 32 && heading() >= 90 + 22) {
+      stage++; prevTime = currentTime; resetEncoders();
+    }
+    break;
+  case 15:
+    myRobot.ArcadeDrive(autospeed, 0.0);
+    if (avgDist >= 2.68+1.75) {
+      stage++; prevTime = currentTime; resetEncoders();
+    }
+    break;
+  case 16:
+    myRobot.ArcadeDrive(0.0, autoturn);
+    if (heading() <= 180 - 9 && heading() >= 180 - 19) {
+      stage++; prevTime = currentTime; resetEncoders();
+    }
+    break;
+  case 17:
+    myRobot.ArcadeDrive(autospeed, 0.0);
+    if (avgDist >= 13) {
+      stage++; prevTime = currentTime; resetEncoders();
+    }
+    break;
+  case 18:
+    myRobot.ArcadeDrive(0.0, autoturn);
+    if (heading() >= 187+22.5 && heading() <= 197+22.5) {
+      stage++; prevTime = currentTime; resetEncoders();
+    }
+    break;
+    case 19:
+    myRobot.ArcadeDrive(autospeed, 0.0);
+    if (avgDist >= 10) {
+      stage++; prevTime = currentTime; resetEncoders();
+    }
 }
+  //blue auto for map A:
+//red auto for map A: (best = 7.5 seconds)
+// if (redAuto) {
+//   switch(stage) {
+//   case 0:
+//     autospeed = -0.5; //set autospeed
+//     autoturn = 0.45;
+//     compressor->Start(); //start compressor
+//     ballIn.Set(frc::DoubleSolenoid::Value::kForward); //extend intake
+//     stage++; prevTime = currentTime; resetEncoders();
+//     break;
+//   case 1:
+//     myRobot.ArcadeDrive(autospeed, 0.08); // drive for 5 feet
+//     intake.Set(0.4); //intake one ball on the way
+//     if (avgDist >= 5) {
+//       stage++; prevTime = currentTime; resetEncoders();
+//   }
+//     break;
+//   case 2:
+//     myRobot.ArcadeDrive(0.0, autoturn); // turn 45 degrees right (heading = 45)
+//     if (heading() >= 26.565 - 19 && heading() <= 26.565 - 11.5) {
+//       stage++; prevTime = currentTime; resetEncoders();
+//   }
+//     break;
+//   case 3:
+//     myRobot.ArcadeDrive(autospeed, 0.0); //drive for a lil over 10.5 ft
+//     intake.Set(0.4); //intake one ball on the way
+//     if (avgDist >= 5.590) {
+//       stage++; prevTime = currentTime; resetEncoders();
+//     }
+//     break;
+//   case 4:
+//     myRobot.ArcadeDrive (0.0, -autoturn); // turn 90 degrees left (heading = 315)
+//     intake.Set(0.4);
+//     if (heading() >= 288.435+18 && heading() <= 288.435+28) {
+//       stage++; prevTime = currentTime; resetEncoders();
+//     }
+//     break;
+//   case 5: 
+//     myRobot.ArcadeDrive(autospeed, 0.0); // drive for 7.07107 ft
+//     intake.Set(0.4); //pick up a ball on the way
+//     if (avgDist >= 7.906-1) {
+//       stage++; prevTime = currentTime; resetEncoders();
+//     }
+//     break;
+//   case 6:
+//     myRobot.ArcadeDrive(0.0, autoturn);
+//     if (heading() <= 360 - 10 && heading() >= 360 - 20) {
+//       stage++; prevTime = currentTime; resetEncoders();
+//     }
+//     break;
+//   case 7: 
+//     myRobot.ArcadeDrive(-1.0, 0.0); // drive for 7.07107 ft
+//     if (avgDist >= 15) {
+//       stage++; prevTime = currentTime; resetEncoders();
+//     }
+//     break;
+//   }
+// }
+// else {
+//   switch(stage) {
+//   case 0:
+//     autospeed = -0.5; //set autospeed
+//     autoturn = 0.45;
+//     compressor->Start(); //start compressor
+//     ballIn.Set(frc::DoubleSolenoid::Value::kForward); //extend intake
+//     stage++; prevTime = currentTime; resetEncoders();
+//     break;
+//   case 1:
+//     myRobot.ArcadeDrive(autospeed, 0.08); // drive for 5 feet
+//     intake.Set(0.4); //intake one ball on the way
+//     if (avgDist >= 12.5) {
+//       stage++; prevTime = currentTime; resetEncoders();
+//   }
+//     break;
+//   case 2:
+//     myRobot.ArcadeDrive(0.0, -autoturn); // turn 45 degrees right (heading = 45)
+//     if (heading() >= 296.565+8 && heading() <= 296.565+18) {
+//       stage++; prevTime = currentTime; resetEncoders();
+//   }
+//     break;
+//   case 3:
+//     myRobot.ArcadeDrive(autospeed, 0.0); //drive for a lil over 10.5 ft
+//     intake.Set(0.4); //intake one ball on the way
+//     if (avgDist >= 2.236+2.5) {
+//       stage++; prevTime = currentTime; resetEncoders();
+//     }
+//     break;
+//   case 4:
+//     myRobot.ArcadeDrive (0.0, autoturn); // turn 90 degrees left (heading = 315)
+//     if (heading() <= 350-8 && heading() >= 340-8) {
+//       stage++; prevTime = currentTime; resetEncoders();
+//     }
+//     break;
+//   case 5: 
+//     myRobot.ArcadeDrive(-1.0, 0.0); // drive for 7.07107 ft
+//     intake.Set(0.4); //pick up a ball on the way
+//     if (avgDist >= 6) {
+//       stage++; prevTime = currentTime; resetEncoders();
+//     }
+//     break;
+// }
+// }
 // }
 
   
@@ -678,6 +816,51 @@ else if (stage == 17) { //drive into the endzone victorious
 
 
 void Robot::TeleopInit() {
+  top->ConfigSelectedFeedbackSensor(ctre::phoenix::motorcontrol::FeedbackDevice::IntegratedSensor, 0, 10);
+  bottom->ConfigSelectedFeedbackSensor(ctre::phoenix::motorcontrol::FeedbackDevice::IntegratedSensor, 0, 10);
+  bottom->SetInverted(ctre::phoenix::motorcontrol::TalonFXInvertType::CounterClockwise);
+  top->SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_13_Base_PIDF0, 10, 10);
+  top->SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_10_MotionMagic, 10, 10);
+  bottom->SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_13_Base_PIDF0, 10, 10);
+  bottom->SetStatusFramePeriod(ctre::phoenix::motorcontrol::StatusFrameEnhanced::Status_10_MotionMagic, 10, 10);
+
+  top->ConfigNominalOutputForward(0, 10);
+  top->ConfigNominalOutputReverse(0, 10);
+  top->ConfigPeakOutputForward(1, 10);
+  top->ConfigPeakOutputReverse(-1, 10);
+
+  top->SelectProfileSlot(0, 0);
+  top->Config_kF(0, 0.3, 10);
+  top->Config_kP(0, 0.1, 10);
+  top->Config_kI(0, 0.0, 10);
+  top->Config_kD(0, 0.0, 10);
+
+  /* Set acceleration and vcruise velocity - see documentation */
+  top->ConfigMotionCruiseVelocity(1500, 10);
+  top->ConfigMotionAcceleration(1500, 10);
+  /* Zero the sensor */
+  top->SetSelectedSensorPosition(0, 0, 10);
+
+  bottom->ConfigNominalOutputForward(0, 10);
+  bottom->ConfigNominalOutputReverse(0, 10);
+  bottom->ConfigPeakOutputForward(1, 10);
+  bottom->ConfigPeakOutputReverse(-1, 10);
+
+  bottom->SelectProfileSlot(0, 0);
+  bottom->Config_kF(0, 0.3, 10);
+  bottom->Config_kP(0, 0.1, 10);
+  bottom->Config_kI(0, 0.0, 10);
+  bottom->Config_kD(0, 0.0, 10);
+
+  /* Set acceleration and vcruise velocity - see documentation */
+  bottom->ConfigMotionCruiseVelocity(1500, 10);
+  bottom->ConfigMotionAcceleration(1500, 10);
+  /* Zero the sensor */
+  bottom->SetSelectedSensorPosition(0, 0, 10);  
+
+  //smoothing things:
+  bottom->ConfigMotionSCurveStrength(smoothing, 0);
+  top->ConfigMotionSCurveStrength(smoothing, 0);
   
   frontLeft->SetSelectedSensorPosition(0.0);
   backLeft->SetSelectedSensorPosition(0.0);
@@ -822,22 +1005,24 @@ else {
 //   }
   if (one.GetRawButton(1)){
     top->Set(1.0);
-    bottom->Set(1.0);
+    bottom->Set(-1.0);
     compressor->Stop();
   }
   else if (one.GetRawButton(2)) {
-    top->Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, 1500);
-    bottom->Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, 1500);
+    top->Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, 5000);
+    bottom->Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, -12000);
+    // bottom->Set(-1.0);
+    // top->Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, 1000);
     compressor->Stop();
   }
   else if (one.GetRawButton(3)) {
     top->Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, 3000);
-    bottom->Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, 3000);
+    bottom->Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, -3000);
     compressor->Stop();
   }
   else if (one.GetRawButton(4)) {
-    top->Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, 4500);
-    bottom->Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, 4500);
+    top->Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, 1225);
+    bottom->Set(ctre::phoenix::motorcontrol::ControlMode::Velocity, -1225);
     compressor->Stop();
   }
   else if (one.GetRawButton(10)){
