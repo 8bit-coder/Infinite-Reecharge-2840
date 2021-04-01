@@ -252,6 +252,7 @@ void Robot::AutonomousPeriodic() {
   // currentTime = timer.Get();
   // frc::SmartDashboard::PutNumber("Heading: ", heading());
   //best time is 16.57 not including penalties, 26.57 including penalties
+  double currentHeading = heading();
   switch(stage) {
   case 0:
     autospeed = -0.5; //set autospeed
@@ -268,7 +269,7 @@ void Robot::AutonomousPeriodic() {
     break;
   case 2:
     myRobot.ArcadeDrive(0.0, -autoturn); // turn 45 degrees right (heading = 45)
-    if (heading() >= 275 + 10 && heading() <= 275 + 20) {
+    if (currentHeading >= 275 + 10 && currentHeading <= 275 + 20) {
       stage++; prevTime = currentTime; resetEncoders();
   }
     break;
@@ -280,31 +281,31 @@ void Robot::AutonomousPeriodic() {
     break;
   case 4:
     myRobot.ArcadeDrive (0.0, autoturn); // turn 90 degrees left (heading = 315)
-    if (heading() >= 345 && heading() <= 355) {
+    if (currentHeading >= 345 && currentHeading <= 355) {
       stage++; prevTime = currentTime; resetEncoders();
     }
     break;
   case 5: 
     myRobot.ArcadeDrive(autospeed, 0.0); // drive for 7.07107 ft
-    if (avgDist >= 10.7) {
+    if (avgDist >= 11.6) {
       stage++; prevTime = currentTime; resetEncoders();
     }
     break;
   case 6:
     myRobot.ArcadeDrive(0.0, autoturn);
-    if (heading() <= 47 && heading() >= 37) {
+    if (currentHeading <= 47 && currentHeading >= 37) {
       stage++; prevTime = currentTime; resetEncoders();
     }
     break;
   case 7: 
     myRobot.ArcadeDrive(autospeed, 0.0); // drive for 7.07107 ft
-    if (avgDist >= 5.83) {
+    if (avgDist >= 5.83-.4) {
       stage++; prevTime = currentTime; resetEncoders();
     }
     break;
   case 8:
     myRobot.ArcadeDrive(0.0, -autoturn);
-    if (heading() >= 15 && heading() <= 25) {
+    if (currentHeading >= 15 && currentHeading <= 25) {
       stage++; prevTime = currentTime; resetEncoders();
     }
     break;
@@ -316,7 +317,7 @@ void Robot::AutonomousPeriodic() {
     break;
   case 10:
     myRobot.ArcadeDrive(0.0, -autoturn);
-    if (heading() <= 275 + 35 && heading() >= 275 + 25) {
+    if (currentHeading <= 275 + 35 && currentHeading >= 275 + 25) {
       stage++; prevTime = currentTime; resetEncoders();
     }
     break;
@@ -328,7 +329,7 @@ void Robot::AutonomousPeriodic() {
     break;
   case 12:
     myRobot.ArcadeDrive(0.0, -autoturn);
-    if (heading() >= 180 + 20 && heading() <= 180 + 30) {
+    if (currentHeading >= 180 + 20 && currentHeading <= 180 + 30) {
       stage++; prevTime = currentTime; resetEncoders();
     }
     break;
@@ -340,7 +341,7 @@ void Robot::AutonomousPeriodic() {
     break;
   case 14:
     myRobot.ArcadeDrive(0.0, -autoturn);
-    if (heading() <= 90 + 32 && heading() >= 90 + 22) {
+    if (currentHeading <= 90 + 32 && currentHeading >= 90 + 22) {
       stage++; prevTime = currentTime; resetEncoders();
     }
     break;
@@ -352,7 +353,7 @@ void Robot::AutonomousPeriodic() {
     break;
   case 16:
     myRobot.ArcadeDrive(0.0, autoturn);
-    if (heading() <= 180 - 9 && heading() >= 180 - 19) {
+    if (currentHeading <= 180 - 9 && currentHeading >= 180 - 19) {
       stage++; prevTime = currentTime; resetEncoders();
     }
     break;
@@ -364,7 +365,7 @@ void Robot::AutonomousPeriodic() {
     break;
   case 18:
     myRobot.ArcadeDrive(0.0, autoturn);
-    if (heading() >= 187+22.5 && heading() <= 197+22.5) {
+    if (currentHeading >= 187+22.5 && currentHeading <= 197+22.5) {
       stage++; prevTime = currentTime; resetEncoders();
     }
     break;
