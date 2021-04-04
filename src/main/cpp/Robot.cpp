@@ -254,6 +254,7 @@ void Robot::AutonomousPeriodic() {
   //best time is 19.33 seconds
   double currentHeading = heading();
   frc::SmartDashboard::PutNumber("Current Heading: ", currentHeading);
+  //Third obstacle course auto:
   switch(stage) {
   case 0:
     autospeed = -0.5; //set autospeed
@@ -264,13 +265,13 @@ void Robot::AutonomousPeriodic() {
     break;
   case 1:
     myRobot.ArcadeDrive(autospeed, 0.08); // drive for 5 feet
-    if (avgDist >= 1.875) {
+    if (avgDist >= 2.2) {
       stage++; prevTime = currentTime; resetEncoders();
   }
     break;
   case 2:
     myRobot.ArcadeDrive(0.0, -autoturn); // turn 45 degrees right (heading = 45)
-    if (currentHeading >= 275 + 7 && currentHeading <= 275 + 7) {
+    if (currentHeading >= 275 + 7 && currentHeading <= 275 + 17) {
       stage++; prevTime = currentTime; resetEncoders();
   }
     break;
@@ -282,13 +283,13 @@ void Robot::AutonomousPeriodic() {
     break;
   case 4:
     myRobot.ArcadeDrive (-autospeed, 0.0); // turn 90 degrees left (heading = 315)
-    if (avgDist <= -1.5) {
+    if (avgDist <= -2.4) {
       stage++; prevTime = currentTime; resetEncoders();
     }
     break;
   case 5: 
     myRobot.ArcadeDrive(0.0, autoturn); // drive for 7.07107 ft
-    if (currentHeading <= 360 - 10 && currentHeading >= 360 - 20) {
+    if (currentHeading >= 360 - 20 && currentHeading <= 360 - 10) {
       stage++; prevTime = currentTime; resetEncoders();
     }
     break;
@@ -306,36 +307,37 @@ void Robot::AutonomousPeriodic() {
     break;
   case 8:
     myRobot.ArcadeDrive(autospeed, 0.0);
-    if (avgDist >= 5) {
+    if (avgDist >= 3) {
       stage++; prevTime = currentTime; resetEncoders();
     }
     break;
   case 9:
     myRobot.ArcadeDrive(0.0, -autoturn);
-    if (currentHeading >= 10 && currentHeading <= 20) {
+    if (currentHeading >= 5 && currentHeading <= 15) {
       stage++; prevTime = currentTime; resetEncoders();
     }
-    break;
+  break;
   case 10:
     myRobot.ArcadeDrive(autospeed, 0.0);
-    if (avgDist >= 5) {
+    if (avgDist >= 2.6) {
       stage++; prevTime = currentTime; resetEncoders();
   }
+  break;
   case 11:
     myRobot.ArcadeDrive(0.0, -autoturn);
-    if (currentHeading >= 270 + 20 && currentHeading <= 270 -10) {
+    if (currentHeading >= 270 + 13 && currentHeading <= 270 + 23) {
       stage++; prevTime = currentTime; resetEncoders();
     }
     break;
   case 12:
-    myRobot.ArcadeDrive(autospeed, 0.0);
-    if (avgDist >= 8) {
+    myRobot.ArcadeDrive(autospeed, 0.08);
+    if (avgDist >= 7.75) {
       stage++; prevTime = currentTime; resetEncoders();
     }
     break;
   case 13:
-    myRobot.ArcadeDrive(-autospeed, 0.0);
-    if (avgDist >= -8) {
+    myRobot.ArcadeDrive(-autospeed, 0.08);
+    if (avgDist <= -7.1) {
       stage++; prevTime = currentTime; resetEncoders();
     }
     break;
@@ -347,7 +349,7 @@ void Robot::AutonomousPeriodic() {
     break;
   case 15:
     myRobot.ArcadeDrive(autospeed, 0.0);
-    if (avgDist >= 7.5) {
+    if (avgDist >= 5) {
       stage++; prevTime = currentTime; resetEncoders();
     }
     break;
@@ -382,6 +384,29 @@ void Robot::AutonomousPeriodic() {
     }
     break;
 }
+//lil baby test program
+  // switch(stage) {
+  // case 0:
+  //   autospeed = -0.5; //set autospeed
+  //   autoturn = 0.4;
+  //   compressor->Stop();
+  //   ballIn.Set(frc::DoubleSolenoid::Value::kReverse); //extend intake
+  //   stage++; prevTime = currentTime; resetEncoders();
+  //   break;
+  // case 1:
+  //   myRobot.ArcadeDrive(autospeed, 0.08); // drive for 5 feet
+  //   if (avgDist >= 2) {
+  //     stage = 2; prevTime = currentTime; resetEncoders();
+  // }
+  //   break;
+  // case 2:
+  //   myRobot.ArcadeDrive(-autospeed, 0.0); // turn 45 degrees right (heading = 45)
+  //   if (avgDist <= -2) {
+  //     stage = 1; prevTime = currentTime; resetEncoders();
+  // }
+  //   break;
+  // }
+
 //   switch(stage) {
 //   case 0:
 //     autospeed = -0.5; //set autospeed
@@ -1003,10 +1028,11 @@ void Robot::TeleopInit() {
   speed = 0.0;
   //sensitivity = -two.GetRawAxis(1);
   ballIn.Set(frc::DoubleSolenoid::Value::kOff);//piston1 no go nyoo
-  // compressor->Start();
-  compressor->Stop();
+  compressor->Start();
+  // compressor->Stop();
   ballStorage.Set(frc::DoubleSolenoid::Value::kReverse);
   calibratePigeon();
+  sensitivity = 0.5;
 }
 
 void Robot::TeleopPeriodic() {
@@ -1016,6 +1042,8 @@ void Robot::TeleopPeriodic() {
   avgDist = -(-(double)frontLeft->GetSelectedSensorPosition()-(double)backLeft->GetSelectedSensorPosition()+(double)frontRight->GetSelectedSensorPosition()+(double)backRight->GetSelectedSensorPosition())/4.0;
   avgDist /= 6612.5;
   frc::SmartDashboard::PutNumber("Average Distance:", avgDist);
+  speed = one.GetRawAxis(1);
+  turn = one.GetRawAxis(4);
   // frc::SmartDashboard::PutNumber("Heading x: ", xyz[0]);
   // frc::SmartDashboard::PutNumber("Heading y: ", xyz[1]);
   // compressor->SetClosedLoopControl(true);
@@ -1028,11 +1056,16 @@ void Robot::TeleopPeriodic() {
    ballStorage.Set(frc::DoubleSolenoid::Value::kReverse);
  }
  if(one.GetRawAxis(3)>0.1){
+  //  myRobot.ArcadeDrive(speed, turn);
+  // sensitivity = 1.0;
    intake.Set(0.4);
  }else if(one.GetRawAxis(2)>0.1){
+  //  myRobot.ArcadeDrive(speed, turn);
    intake.Set(-1.0);
+  // sensitivity = 1.0;
  }else{
    intake.Set(0.0);
+   sensitivity = 0.65;
  }
 
 //frc::DriverStation::GetBatteryVoltage(); 
@@ -1160,7 +1193,7 @@ else {
   else if (one.GetRawButton(10)){
     top->Set(0);
     bottom->Set(0);
-    // compressor->Start();
+    compressor->Start();
   }
   
   if(one.GetRawButton(6)) {
@@ -1171,6 +1204,12 @@ else {
   }
   else if (!one.GetRawButton(6)&&!one.GetRawButton(5)){
     ballIn.Set(frc::DoubleSolenoid::Value::kOff);//piston1 stop
+  }
+  if(one.GetRawButton(7)) {
+    ballUnstuck.Set(true);
+  }
+  else if (!one.GetRawButton(7)) {
+    ballUnstuck.Set(false);
   }
   //sensitivity = -two.GetRawAxis(1);
   
@@ -1189,8 +1228,8 @@ else {
 //  else if (one.GetPOV(180) && sensitivity <= 0.0) {
 //    sensitivity = 0.0;
 //  }*/
-  speed = one.GetRawAxis(1);
-  turn = one.GetRawAxis(4);
+  // speed = one.GetRawAxis(1);
+  // turn = one.GetRawAxis(4);
 
   myRobot.ArcadeDrive(speed*sensitivity, turn*sensitivity);
 

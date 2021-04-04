@@ -14,12 +14,5 @@ In file included from C:\Users\Programming\Documents\GitHub\Infinite-Reecharge-2
 C:\Users\Programming\.gradle\caches\transforms-2\files-2.1\c8e850653c2afd60a8151f1bf737926e\wpilibc-cpp-2020.3.2-headers/frc/RobotDrive.h:120:3: note: declared here
    RobotDrive(SpeedController& frontLeftMotor, SpeedController& rearLeftMotor,
    ^~~~~~~~~~
-C:\Users\Programming\Documents\GitHub\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp: In member function 'virtual void Robot::AutonomousPeriodic()':
-C:\Users\Programming\Documents\GitHub\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp:321:5: warning: this statement may fall through [-Wimplicit-fallthrough=]
-     if (avgDist >= 5) {
-     ^~
-C:\Users\Programming\Documents\GitHub\Infinite-Reecharge-2840\src\main\cpp\Robot.cpp:324:3: note: here
-   case 11:
-   ^~~~
 
 Finished compileFrcUserProgramReleaseExecutableFrcUserProgramCpp, see full log file:///C:/Users/Programming/Documents/GitHub/Infinite-Reecharge-2840/build/tmp/compileFrcUserProgramReleaseExecutableFrcUserProgramCpp/output.txt.
